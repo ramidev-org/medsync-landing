@@ -3,9 +3,9 @@
 import * as React from "react";
 import { MotionConfig, motion, useInView, useReducedMotionConfig } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
-  ArrowLeft,
-  ArrowRight,
   Archive,
   BadgeCheck,
   Building2,
@@ -25,6 +25,7 @@ import {
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { getWhatsAppPhoneDigits } from "@/lib/whatsapp";
 
 const BRAND = {
   name: "MedSync",
@@ -134,7 +135,7 @@ const testimonials = [
   {
     name: "Dr. Amina B.",
     specialty: "Medecine generale",
-    text: "Le workflow reste simple pour un cabinet solo tout en gardant les notes, paiements et suivis bien organises.",
+    text: "Le parcours reste simple pour un cabinet solo tout en gardant les notes, paiements et suivis bien organises.",
     avatar: "https://randomuser.me/api/portraits/women/44.jpg",
   },
   {
@@ -151,13 +152,13 @@ const testimonials = [
   },
   {
     name: "Dr. Samir A.",
-    specialty: "Urology",
+    specialty: "Urologie",
     text: "Une alternative moderne aux logiciels locaux, surtout quand on veut acces web et sauvegarde.",
     avatar: "https://randomuser.me/api/portraits/men/76.jpg",
   },
   {
     name: "Dr. Nesrine T.",
-    specialty: "Cardiology",
+    specialty: "Cardiologie",
     text: "Le tableau de bord rend la journee plus lisible : visites, taches, paiements et actions patient.",
     avatar: "https://randomuser.me/api/portraits/men/74.jpg",
   },
@@ -191,7 +192,7 @@ const pricingPlans = [
       "Medecins et assistants",
       "Services et facturation",
       "Taches partagees",
-      "Support prioritaire",
+      "Assistance prioritaire",
     ],
   },
   {
@@ -233,7 +234,7 @@ const comparisonRows = [
   { label: "Utilisateurs / postes", values: ["1", "2-3", "Illimites", "Guide"] },
   { label: "Paiements + factures", values: ["Essentiel", "Complet", "Complet + exports", "Apercu"] },
   { label: "Rapports", values: ["Basique", "Standard", "Avances", "-"] },
-  { label: "Support + onboarding", values: ["WhatsApp", "Prioritaire", "Prioritaire + migration", "Guide"] },
+  { label: "Assistance + mise en route", values: ["WhatsApp", "Prioritaire", "Prioritaire + migration", "Guide"] },
 ] as const;
 
 const comparisonPlans = ["Solo", "Clinique", "Pro", "Test"] as const;
@@ -247,12 +248,12 @@ const faqItems = [
   {
     question: "Est-ce que je peux etre accompagne ?",
     answer:
-      "Oui. Le lancement doit inclure une configuration guidee et un support WhatsApp pour les cabinets pilotes.",
+      "Oui. Le lancement doit inclure une configuration guidee et une assistance WhatsApp pour les cabinets pilotes.",
   },
   {
     question: "Est-ce reserve aux grandes cliniques ?",
     answer:
-      "Non. Le workflow principal est pense d abord pour un medecin seul dans un cabinet prive.",
+      "Non. Le parcours principal est pense d abord pour un medecin seul dans un cabinet prive.",
   },
   {
     question: "Que se passe-t-il si je change ordinateur ?",
@@ -392,6 +393,7 @@ function SecondaryButton({
 }
 
 export function LandingPage() {
+  const router = useRouter();
   const [activeNav, setActiveNav] = React.useState<NavId>("features");
   const sectionsRef = React.useRef<Record<string, HTMLElement | null>>({});
 
@@ -438,7 +440,7 @@ export function LandingPage() {
         </main>
 
         <div className="md:hidden">
-          <BottomCTA onClick={() => scrollToSection("pricing")} />
+          <BottomCTA onClick={() => router.push("/request?intent=test")} />
         </div>
       </div>
     </MotionConfig>
@@ -452,15 +454,24 @@ function Header({
   activeNav: string;
   onNav: (id: string) => void;
 }) {
+  const router = useRouter();
   return (
     <div className="sticky top-0 z-50 border-b border-[rgba(15,23,42,0.08)] bg-[rgba(255,255,255,0.86)] backdrop-blur-[10px]">
       <div className="mx-auto w-full max-w-[1200px] px-5 py-3.5">
         <div className="flex items-center justify-between gap-4">
-          <div className="text-[22px] font-semibold" style={{ color: BRAND.accent }}>
+          <Link href="/" className="text-[22px] font-semibold" style={{ color: BRAND.accent }}>
             {BRAND.name}
-          </div>
+          </Link>
 
           <div className="hidden items-center gap-3 md:flex">
+            <Button
+              asChild
+              variant="ghost"
+              className="h-10 rounded-full px-3 text-[13px] font-semibold text-[#334155] hover:bg-[#f8fafc]"
+            >
+              <Link href="/about">A propos</Link>
+            </Button>
+
             {navItems.map((item) => {
               const isActive = activeNav === item.id;
               return (
@@ -481,8 +492,8 @@ function Header({
 
             <div className="w-2.5" />
 
-            <SecondaryButton onClick={() => {}}>CONNEXION</SecondaryButton>
-            <PrimaryButton onClick={() => {}}>ESSAI GRATUIT</PrimaryButton>
+            <SecondaryButton onClick={() => router.push("/request?intent=plan")}>CHOISIR UNE OFFRE</SecondaryButton>
+            <PrimaryButton onClick={() => router.push("/request?intent=test")}>DEMANDER UN TEST</PrimaryButton>
           </div>
         </div>
       </div>
@@ -491,6 +502,7 @@ function Header({
 }
 
 function Hero({ onNav }: { onNav: (id: string) => void }) {
+  const router = useRouter();
   return (
     <section className="bg-[#f8fafc]">
       <div className="mx-auto w-full max-w-[1200px] px-5 py-16">
@@ -513,14 +525,14 @@ function Hero({ onNav }: { onNav: (id: string) => void }) {
             </p>
 
             <div className="mt-5 flex flex-wrap gap-3">
-              <PrimaryButton onClick={() => {}}>OBTENIR UNE CLE ESSAI</PrimaryButton>
+              <PrimaryButton onClick={() => router.push("/request?intent=test")}>DEMANDER UN TEST</PrimaryButton>
               <SecondaryButton onClick={() => onNav("features")}>
                 VOIR LES FONCTIONNALITES
               </SecondaryButton>
             </div>
 
             <div className="mt-5 flex flex-wrap gap-[18px]">
-              {["Prise en main rapide", "Acces securise", "Support WhatsApp"].map((t) => (
+              {["Prise en main rapide", "Acces securise", "Assistance WhatsApp"].map((t) => (
                 <div
                   key={t}
                   className="flex items-center gap-2 rounded-full border border-[rgba(2,6,23,0.06)] bg-[rgba(2,6,23,0.04)] px-2.5 py-2"
@@ -617,7 +629,7 @@ function FeaturesSection() {
           <SectionHeader
             center
             title="Better than a simple desktop cabinet tool"
-            description="Keep the familiar clean design, but add the cloud workflow, solo-doctor focus, and launch-ready operations your market needs."
+            description="Une interface claire pour retrouver les actions importantes du cabinet sans alourdir la journee."
           />
         </Reveal>
 
@@ -678,7 +690,7 @@ function FeaturesSection() {
             center
             eyebrow="SPECIALITES"
             title="Adapte aux specialites courantes"
-            description="Le meme workflow de base, avec des espaces specialises quand le cabinet en a besoin."
+            description="Le meme parcours de base, avec des espaces specialises quand le cabinet en a besoin."
           />
 
           <div className="mt-6 flex flex-wrap justify-center gap-2.5">
@@ -799,131 +811,38 @@ function StatsSection() {
 }
 
 function TestimonialsSection() {
-  const scrollerRef = React.useRef<HTMLDivElement | null>(null);
-  const [active, setActive] = React.useState(0);
-
-  const [step, setStep] = React.useState(352 + 12);
-
-  React.useEffect(() => {
-    const el = scrollerRef.current;
-    if (!el) return;
-    const firstCard = el.querySelector<HTMLElement>("[data-testimonial-card]");
-    if (!firstCard) return;
-
-    const measure = () => {
-      const width = Math.round(firstCard.getBoundingClientRect().width);
-      if (width) setStep(width + 12);
-    };
-
-    measure();
-    const ro = new ResizeObserver(measure);
-    ro.observe(firstCard);
-    return () => ro.disconnect();
-  }, []);
-
-  const scrollTo = (index: number) => {
-    const next = Math.max(0, Math.min(index, testimonials.length - 1));
-    const el = scrollerRef.current;
-    if (!el) return;
-    el.scrollTo({ left: next * step, behavior: "smooth" });
-    setActive(next);
-  };
-
   return (
     <section id="testimonials" className="scroll-mt-24 bg-white">
-      <div className="mx-auto w-full max-w-[1200px] px-5 py-16">
+      <div className="mx-auto w-full max-w-[980px] px-5 py-16">
         <Reveal>
           <SectionHeader center eyebrow="AVIS MEDECINS" title="Pense pour les cabinets medicaux en Algerie" />
         </Reveal>
 
-        <div className="mt-6 flex items-center justify-between gap-4">
-          <div className="text-[13px] text-[#64748b]">
-            Parcourez les retours des medecins avec les fleches ou en glissant horizontalement.
-          </div>
-          <div className="flex gap-2.5">
-            <button
-              onClick={() => scrollTo(active - 1)}
-              disabled={active === 0}
-              className={cn(
-                "flex size-[42px] items-center justify-center rounded-full border border-[rgba(2,6,23,0.10)]",
-                active === 0 ? "bg-[#f8fafc] text-[#94a3b8]" : "bg-white text-[#0b1220]",
-              )}
-            >
-              <ArrowLeft className="size-[18px]" />
-            </button>
-            <button
-              onClick={() => scrollTo(active + 1)}
-              disabled={active === testimonials.length - 1}
-              className={cn(
-                "flex size-[42px] items-center justify-center rounded-full border",
-                active === testimonials.length - 1
-                  ? "border-[rgba(2,6,23,0.10)] bg-[#f8fafc] text-[#94a3b8]"
-                  : "border-[rgba(13,110,253,0.20)] bg-[#0D6EFD] text-white",
-              )}
-            >
-              <ArrowRight className="size-[18px]" />
-            </button>
-          </div>
-        </div>
-
-        <div
-          ref={scrollerRef}
-          className="mt-4 overflow-x-auto pb-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
-          onScroll={(e) => {
-            const x = (e.target as HTMLDivElement).scrollLeft;
-            const next = Math.round(x / step);
-            if (next !== active) setActive(next);
-          }}
-        >
-          <div className="flex w-max gap-3 pr-2">
-            {testimonials.map((item, index) => (
-              <Reveal key={item.name} delay={0.12 + index * 0.06}>
-                <div
-                  data-testimonial-card
-                  className={cn(
-                    "rounded-[24px] border border-[rgba(2,6,23,0.10)] bg-[#f8fafc] p-5 shadow-[0_16px_36px_-30px_rgba(15,23,42,0.22)]",
-                    "w-[352px] md:w-[432px]",
-                  )}
-                >
-                  <div className="mb-3 flex items-center gap-3">
-                    <Image
-                      src={item.avatar}
-                      alt=""
-                      width={48}
-                      height={48}
-                      className="size-12 rounded-full object-cover"
-                    />
-                    <div className="min-w-0 flex-1">
-                      <div className="truncate text-[15px] font-semibold text-[#0b1220]">
-                        {item.name}
-                      </div>
-                      <div className="text-[13px]" style={{ color: BRAND.accent }}>
-                        {item.specialty}
-                      </div>
+        <Reveal delay={0.12}>
+          <div className="mt-7 grid gap-3 md:grid-cols-3">
+            {testimonials.slice(0, 3).map((item) => (
+              <div
+                key={item.name}
+                className="rounded-[22px] border border-[rgba(2,6,23,0.10)] bg-[#f8fafc] p-4"
+              >
+                <div className="mb-3 flex items-center gap-3">
+                  <Image
+                    src={item.avatar}
+                    alt=""
+                    width={44}
+                    height={44}
+                    className="size-11 rounded-full object-cover"
+                  />
+                  <div className="min-w-0 flex-1">
+                    <div className="truncate text-[14px] font-semibold text-[#0b1220]">{item.name}</div>
+                    <div className="text-[12px]" style={{ color: BRAND.accent }}>
+                      {item.specialty}
                     </div>
                   </div>
-
-                  <div className="text-[14px] leading-[22px] text-[#334155]">
-                    {item.text}
-                  </div>
                 </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
 
-        <Reveal delay={0.3}>
-          <div className="mt-4 flex justify-center gap-2">
-            {testimonials.map((t, index) => (
-              <button
-                key={t.name}
-                onClick={() => scrollTo(index)}
-                className={cn(
-                  "h-2 rounded-full transition-all",
-                  active === index ? "w-7 bg-[#0D6EFD]" : "w-2 bg-[rgba(13,110,253,0.22)]",
-                )}
-                aria-label={`Go to testimonial ${index + 1}`}
-              />
+                <div className="text-[13px] leading-[20px] text-[#334155]">{item.text}</div>
+              </div>
             ))}
           </div>
         </Reveal>
@@ -933,6 +852,7 @@ function TestimonialsSection() {
 }
 
 function PricingSection() {
+  const router = useRouter();
   return (
     <section id="pricing" className="scroll-mt-24 bg-white">
       <div className="mx-auto w-full max-w-[1200px] px-5 py-16">
@@ -941,23 +861,23 @@ function PricingSection() {
             center
             eyebrow="TARIFS"
             title="Des offres simples pour demarrer"
-            description="Facturation annuelle pour les plans actifs, avec un essai accompagne pour valider le workflow avant activation."
+            description="Facturation annuelle pour les plans actifs, avec un essai accompagne pour valider le parcours avant activation."
           />
         </Reveal>
 
         <Reveal delay={0.08}>
           <div className="mx-auto mt-5 w-fit rounded-full border border-[rgba(13,110,253,0.14)] bg-[rgba(13,110,253,0.08)] px-3.5 py-2 text-[12px] font-semibold text-[#0D6EFD]">
-            Tarifs annuels • activation et onboarding inclus
+            Tarifs annuels • activation et mise en route incluses
           </div>
         </Reveal>
 
         <Reveal delay={0.12}>
           <div className="mx-auto mt-6 w-full max-w-[860px] rounded-[20px] border border-[rgba(2,6,23,0.08)] bg-[#f8fafc] p-[18px]">
             <div className="text-[15px] font-semibold text-[#0b1220]">
-              Promesse onboarding
+              Promesse de mise en route
             </div>
             <div className="mt-3 flex flex-wrap gap-2.5">
-              {["Setup initial guide", "Aide migration des donnees", "Support WhatsApp"].map((item) => (
+              {["Configuration initiale guidee", "Aide migration des donnees", "Assistance WhatsApp"].map((item) => (
                 <div
                   key={item}
                   className="rounded-full border border-[rgba(13,110,253,0.12)] bg-white px-3 py-2.5 text-[12px] font-semibold text-[#0D6EFD]"
@@ -1023,6 +943,10 @@ function PricingSection() {
 
                 <div className="mt-5">
                   <button
+                    onClick={() => {
+                      if (plan.name === "Test") router.push("/request?intent=test");
+                      else router.push(`/request?intent=plan&plan=${encodeURIComponent(plan.name)}`);
+                    }}
                     className={cn(
                       "w-full rounded-[14px] border px-4 py-3 text-[14px] font-semibold",
                       plan.featured
@@ -1093,51 +1017,53 @@ function PricingSection() {
           </div>
 
           <div className="mt-6 hidden md:block">
-            <div className="rounded-[24px] border border-[rgba(2,6,23,0.08)] bg-white p-3 shadow-[0_18px_46px_-34px_rgba(15,23,42,0.22)]">
-              <div className="mb-2 flex gap-2.5">
-                {["Fonction", ...comparisonPlans].map((head, index) => (
-                  <div
-                    key={head}
-                    className={cn(
-                      "rounded-[18px] border px-3.5 py-4",
-                      index === 0 ? "w-[260px]" : "w-[150px]",
-                      head === "Clinique"
-                        ? "border-[rgba(13,110,253,0.35)] bg-[#0D6EFD] text-white"
-                        : "border-[rgba(2,6,23,0.08)] bg-[#f8fafc] text-[#0b1220]",
-                      index === 0 && "bg-[#eff6ff]",
-                    )}
-                  >
-                    <div className="text-[13px] font-semibold">{head}</div>
-                    {head === "Clinique" ? (
-                      <div className="mt-1 text-[11px] text-[rgba(255,255,255,0.82)]">Le plus choisi</div>
-                    ) : null}
-                  </div>
-                ))}
-              </div>
-
-              {comparisonRows.map((row, rowIndex) => (
-                <div key={row.label} className={cn("flex gap-2.5", rowIndex === 0 ? "" : "mt-2.5")}>
-                  <div
-                    className={cn(
-                      "w-[260px] rounded-[18px] border border-[rgba(2,6,23,0.06)] px-3.5 py-4",
-                      rowIndex % 2 === 0 ? "bg-white" : "bg-[#f8fafc]",
-                    )}
-                  >
-                    <div className="text-[13px] font-semibold text-[#0b1220]">{row.label}</div>
-                  </div>
-                  {row.values.map((value, valueIndex) => (
-                    <div
-                      key={`${row.label}-${valueIndex}`}
-                      className={cn(
-                        "w-[150px] rounded-[18px] border border-[rgba(2,6,23,0.06)] px-3.5 py-4",
-                        rowIndex % 2 === 0 ? "bg-white" : "bg-[#f8fafc]",
-                      )}
-                    >
-                      <div className="text-[13px] text-[#334155]">{value}</div>
-                    </div>
+            <div className="overflow-x-auto rounded-[24px] border border-[rgba(2,6,23,0.08)] bg-white p-3 shadow-[0_18px_46px_-34px_rgba(15,23,42,0.22)]">
+              <table className="w-full min-w-[860px] border-collapse text-[13px]">
+                <thead>
+                  <tr>
+                    <th className="w-[260px] border border-[rgba(2,6,23,0.10)] bg-[#eff6ff] px-4 py-3 text-left font-semibold text-[#0b1220]">
+                      Fonction
+                    </th>
+                    {comparisonPlans.map((head) => (
+                      <th
+                        key={head}
+                        className={cn(
+                          "border border-[rgba(2,6,23,0.10)] px-4 py-3 text-left font-semibold",
+                          head === "Clinique" ? "bg-[#0D6EFD] text-white" : "bg-[#f8fafc] text-[#0b1220]",
+                        )}
+                      >
+                        <div>{head}</div>
+                        {head === "Clinique" ? (
+                          <div className="mt-1 text-[11px] font-semibold text-[rgba(255,255,255,0.82)]">Le plus choisi</div>
+                        ) : null}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {comparisonRows.map((row, rowIndex) => (
+                    <tr key={row.label} className={rowIndex % 2 === 0 ? "bg-white" : "bg-[#f8fafc]"}>
+                      <td className="border border-[rgba(2,6,23,0.08)] px-4 py-3 font-semibold text-[#0b1220]">
+                        {row.label}
+                      </td>
+                      {row.values.map((value, valueIndex) => {
+                        const planName = comparisonPlans[valueIndex];
+                        return (
+                          <td
+                            key={`${row.label}-${valueIndex}`}
+                            className={cn(
+                              "border border-[rgba(2,6,23,0.08)] px-4 py-3 text-[#334155]",
+                              planName === "Clinique" && "bg-[rgba(13,110,253,0.08)]",
+                            )}
+                          >
+                            {value}
+                          </td>
+                        );
+                      })}
+                    </tr>
                   ))}
-                </div>
-              ))}
+                </tbody>
+              </table>
             </div>
           </div>
         </Reveal>
@@ -1235,6 +1161,7 @@ function FAQSection() {
 }
 
 function FooterContact() {
+  const whatsappPhone = getWhatsAppPhoneDigits();
   return (
     <footer id="contact" className="scroll-mt-24 bg-[#0b1220] text-white">
       <div className="mx-auto w-full max-w-[1200px] px-5 py-16">
@@ -1253,8 +1180,11 @@ function FooterContact() {
                   <div className="text-[20px] font-semibold">Contact</div>
                   <div className="mt-3 grid gap-3 sm:grid-cols-2">
                     {[
-                      { label: "WhatsApp", value: "Numero onboarding a renseigner" },
-                      { label: "Email", value: "Email commercial a renseigner" },
+                      {
+                        label: "WhatsApp",
+                        value: whatsappPhone ? `+${whatsappPhone}` : "Renseigner NEXT_PUBLIC_WHATSAPP_PHONE",
+                      },
+                      { label: "E-mail", value: "Adresse commerciale a renseigner" },
                       { label: "Onboarding", value: "Contact mise en route a renseigner" },
                     ].map((item) => (
                       <div
@@ -1265,6 +1195,21 @@ function FooterContact() {
                         <div className="mt-1 text-[13px] text-[#94a3b8]">{item.value}</div>
                       </div>
                     ))}
+                  </div>
+
+                  <div className="mt-4 flex flex-wrap gap-3">
+                    <button
+                      onClick={() => (window.location.href = "/request?intent=test")}
+                      className="rounded-[14px] bg-[#0D6EFD] px-4 py-3 text-[12px] font-semibold text-white"
+                    >
+                      Demander un test
+                    </button>
+                    <button
+                      onClick={() => (window.location.href = "/request?intent=plan&plan=Pro")}
+                      className="rounded-[14px] border border-[rgba(255,255,255,0.14)] bg-[rgba(255,255,255,0.06)] px-4 py-3 text-[12px] font-semibold text-white"
+                    >
+                      Demander activation (Pro)
+                    </button>
                   </div>
                 </div>
 
@@ -1316,14 +1261,14 @@ function BottomCTA({ onClick }: { onClick: () => void }) {
         <div className="min-w-0 flex-1">
           <div className="text-[13px] font-semibold">Activez votre cabinet</div>
           <div className="mt-1 text-[12px] text-[rgba(255,255,255,0.72)]">
-            Demandez un essai et commencez votre onboarding.
+            Demandez un essai et commencez votre mise en route.
           </div>
         </div>
         <button
           onClick={onClick}
           className="rounded-[12px] bg-[#0D6EFD] px-4 py-3 text-[12px] font-semibold"
         >
-          ESSAI GRATUIT
+          DEMANDER TEST
         </button>
       </div>
     </div>
