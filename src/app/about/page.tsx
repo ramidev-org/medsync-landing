@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft, CheckCircle2, MessageCircle, ShieldCheck } from "lucide-react";
+import { CheckCircle2, MessageCircle, ShieldCheck } from "lucide-react";
 
 const processSteps = [
   {
@@ -25,21 +25,8 @@ const principles = [
 export default function AboutPage() {
   return (
     <main className="min-h-screen bg-[#f8fafc] text-[#0b1220]">
-      <div className="mx-auto w-full max-w-[1040px] px-5 py-8 md:py-12">
-        <header className="flex items-center justify-between gap-4 rounded-xl border border-[rgba(2,6,23,0.08)] bg-white px-4 py-3">
-          <Link href="/" className="text-[20px] font-semibold text-[#0D6EFD]">
-            MedSync
-          </Link>
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 rounded-lg border border-[rgba(2,6,23,0.10)] bg-white px-3.5 py-2.5 text-[12px] font-semibold text-[#0b1220] hover:bg-[#f8fafc]"
-          >
-            <ArrowLeft className="size-4" />
-            Retour au site
-          </Link>
-        </header>
-
-        <section className="grid gap-6 py-10 md:grid-cols-[1.15fr_0.85fr] md:items-start">
+      <div className="mx-auto w-full max-w-[1040px] px-5 py-10 md:py-14">
+        <section className="grid gap-6 md:grid-cols-[1.15fr_0.85fr] md:items-start">
           <div>
             <div className="text-xs font-semibold tracking-widest text-[#64748b]">A PROPOS</div>
             <h1 className="mt-3 max-w-[720px] text-balance text-[36px] font-semibold leading-[42px] md:text-[44px] md:leading-[50px]">

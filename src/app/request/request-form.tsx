@@ -1,9 +1,8 @@
 "use client";
 
 import * as React from "react";
-import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { ArrowLeft, CheckCircle2, MessageCircle, Send } from "lucide-react";
+import { CheckCircle2, MessageCircle, Send } from "lucide-react";
 
 import { buildLeadMessage, buildWhatsAppUrl, type LeadFormData } from "@/lib/whatsapp";
 
@@ -72,21 +71,8 @@ export function RequestForm() {
 
   return (
     <main className="min-h-screen bg-[#f8fafc] text-[#0b1220]">
-      <div className="mx-auto w-full max-w-[1040px] px-5 py-8 md:py-12">
-        <header className="flex items-center justify-between gap-4 rounded-xl border border-[rgba(2,6,23,0.08)] bg-white px-4 py-3">
-          <Link href="/" className="text-[20px] font-semibold text-[#0D6EFD]">
-            MedSync
-          </Link>
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 rounded-lg border border-[rgba(2,6,23,0.10)] bg-white px-3.5 py-2.5 text-[12px] font-semibold text-[#0b1220] hover:bg-[#f8fafc]"
-          >
-            <ArrowLeft className="size-4" />
-            Retour au site
-          </Link>
-        </header>
-
-        <div className="mt-8 grid gap-6 md:grid-cols-5 md:items-start">
+      <div className="mx-auto w-full max-w-[1040px] px-5 py-10 md:py-14">
+        <div className="grid gap-6 md:grid-cols-5 md:items-start">
           <div className="md:col-span-2">
             <aside className="rounded-xl border border-[rgba(2,6,23,0.08)] bg-white p-5 md:sticky md:top-6">
               <div className="text-xs font-semibold tracking-widest text-[#64748b]">DEMANDE D&apos;ACCES</div>
@@ -242,13 +228,6 @@ export function RequestForm() {
                   <Send className="size-4" />
                   Envoyer la demande
                 </button>
-                <Link
-                  href="/"
-                  className="inline-flex items-center gap-2 rounded-lg border border-[rgba(2,6,23,0.10)] bg-white px-4 py-3 text-[12px] font-semibold text-[#0b1220] hover:bg-[#f8fafc]"
-                >
-                  <ArrowLeft className="size-4" />
-                  Retour
-                </Link>
               </div>
             </form>
           </div>

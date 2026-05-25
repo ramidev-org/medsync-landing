@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Providers } from "./providers";
+import { SiteHeader } from "@/components/landing/site-header";
 
 export const metadata: Metadata = {
-  title: "MyDoctor — Modern clinic scheduling",
+  title: "MedSync - Logiciel de cabinet medical",
   description:
-    "MyDoctor is a SaaS landing page for modern clinics: appointments, reminders, and patient messaging with a clean, fast UX.",
+    "MedSync aide les cabinets medicaux a gerer agenda, dossiers patients, ordonnances PDF, paiements et mise en route accompagnee.",
 };
 
 export default function RootLayout({
@@ -14,9 +15,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full antialiased">
+    <html lang="fr" className="h-full antialiased">
       <body className="min-h-full flex flex-col">
-        <Providers>{children}</Providers>
+        <Providers>
+          <SiteHeader />
+          <div aria-hidden="true" className="h-20" />
+          {children}
+        </Providers>
       </body>
     </html>
   );

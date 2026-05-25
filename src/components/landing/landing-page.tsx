@@ -3,24 +3,28 @@
 import * as React from "react";
 import { MotionConfig, motion, useInView, useReducedMotionConfig } from "framer-motion";
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   Archive,
-  BadgeCheck,
+  BarChart3,
   Building2,
-  Calendar,
   CheckCircle2,
   ChevronDown,
+  ClipboardList,
   FileLock2,
+  FileText,
   FolderOpen,
-  Heart,
-  Image as ImageIcon,
   Key,
+  ListTodo,
+  LockKeyhole,
+  MessageCircle,
+  MessagesSquare,
+  PackageCheck,
   ShieldCheck,
   Sparkles,
   Stethoscope,
   User,
+  UsersRound,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -32,103 +36,91 @@ const BRAND = {
   accent: "#0D6EFD",
 };
 
-const navItems = [
-  { label: "Fonctionnalites", id: "features" },
-  { label: "Avis medecins", id: "testimonials" },
-  { label: "Tarifs", id: "pricing" },
-  { label: "FAQ", id: "faq" },
-  { label: "Contact", id: "contact" },
-] as const;
-
-const productScreens = [
+const productModules = [
   {
-    title: "Agenda et file d attente",
-    subtitle: "Vue reception + medecin pour la journee en cours",
-    accent: "#0D6EFD",
-    metrics: ["18 rendez-vous", "4 patients en attente", "2 rappels envoyes"],
-  },
-  {
-    title: "Dossier patient complet",
-    subtitle: "Constantes, antecedents, consultation et documents",
-    accent: "#16a34a",
-    metrics: ["Antecedents", "Mesures vitales", "Ordonnances PDF"],
-  },
-  {
-    title: "Paiements et services",
-    subtitle: "Facturation simple avec suivi des actes et recus",
-    accent: "#f59e0b",
-    metrics: ["6 paiements recus", "2 impayes", "Journal du jour"],
-  },
-] as const;
-
-const features = [
-  {
-    title: "Agenda du medecin",
-    description:
-      "Une vue claire pour les rendez-vous, les passages spontanes et les suivis.",
-    icon: Calendar,
+    title: "File d attente lisible",
+    description: "Reception et medecin voient la meme journee, sans appels repetes.",
+    icon: ClipboardList,
+    color: "#0D6EFD",
   },
   {
     title: "Dossiers patients",
-    description:
-      "Historique, constantes, consultations et documents retrouves rapidement.",
+    description: "Historique, constantes, documents et suivi patient retrouves vite.",
     icon: FolderOpen,
-  },
-  {
-    title: "Facturation simple",
-    description:
-      "Suivez les actes, factures, paiements recus et montants en attente.",
-    icon: Building2,
+    color: "#16a34a",
   },
   {
     title: "Ordonnances PDF",
-    description: "Imprimez ordonnances, lettres et documents avec en-tete du cabinet.",
-    icon: FileLock2,
-  },
-] as const;
-
-const specialties = [
-  "Medecine generale",
-  "Pediatrie",
-  "Orthopedie",
-  "Ophtalmologie",
-  "Cardiologie",
-  "Urologie",
-  "Dermatologie",
-  "Neurologie",
-] as const;
-
-const specialtyCards = [
-  {
-    title: "Dentisterie",
-    description: "Suivi soins, actes, odontogramme et historique de traitement.",
-    icon: Stethoscope,
-    tags: ["Odontogramme", "Actes", "Historique"],
+    description: "Documents propres avec en-tete du cabinet et historique patient.",
+    icon: FileText,
+    color: "#2563eb",
   },
   {
-    title: "Dermatologie",
-    description: "Photos, suivi de lesions et comparaisons avant/apres.",
-    icon: ImageIcon,
-    tags: ["Photos", "Suivi lesions", "Comparaison"],
+    title: "Roles securises",
+    description: "Medecin, assistant et administrateur avec permissions separees.",
+    icon: LockKeyhole,
+    color: "#0f766e",
   },
   {
-    title: "Cardiologie",
-    description: "Observations cliniques, suivi tension et consultation structuree.",
-    icon: Heart,
-    tags: ["Constantes", "Observation", "Suivi"],
+    title: "Staff et planning",
+    description: "Gardez une vue claire sur les disponibilites et les postes.",
+    icon: UsersRound,
+    color: "#9333ea",
   },
   {
-    title: "Gynecologie",
-    description: "Formulaires specialises, historique et parcours de consultation.",
-    icon: BadgeCheck,
-    tags: ["Formulaire", "Historique", "Parcours"],
+    title: "Chat interne",
+    description: "Coordonnez assistant, medecin et accueil autour d un patient.",
+    icon: MessagesSquare,
+    color: "#7c3aed",
+  },
+  {
+    title: "Inventaire",
+    description: "Suivez consommables, stock critique et besoins d achat.",
+    icon: PackageCheck,
+    color: "#f59e0b",
+  },
+  {
+    title: "Taches d equipe",
+    description: "Affectez rappels, suivis, documents et actions administratives.",
+    icon: ListTodo,
+    color: "#0891b2",
+  },
+  {
+    title: "Rapports",
+    description: "Analysez rendez-vous, paiements, activite et performance du cabinet.",
+    icon: BarChart3,
+    color: "#dc2626",
+  },
+  {
+    title: "Assistance WhatsApp",
+    description: "Mise en route accompagnee pour les cabinets pilotes.",
+    icon: MessageCircle,
+    color: "#16a34a",
   },
 ] as const;
 
 const stats = [
-  { value: 120, suffix: "+", label: "Cabinets cibles" },
-  { value: 35000, suffix: "+", label: "Patients organises" },
-  { value: 300, suffix: "+", label: "Medecins a servir" },
+  {
+    value: 120,
+    suffix: "+",
+    label: "Cliniques et cabinets",
+    detail: "Structures que MedSync peut accompagner avec un demarrage clair.",
+    icon: Building2,
+  },
+  {
+    value: 35000,
+    suffix: "+",
+    label: "Patients organises",
+    detail: "Dossiers, documents et historiques retrouves sans papier disperse.",
+    icon: UsersRound,
+  },
+  {
+    value: 300,
+    suffix: "+",
+    label: "Medecins a servir",
+    detail: "Generalistes, specialistes et equipes avec des roles separes.",
+    icon: Stethoscope,
+  },
 ] as const;
 
 const testimonials = [
@@ -289,8 +281,6 @@ const trustLinks = [
   "Traitement des donnees",
 ] as const;
 
-type NavId = (typeof navItems)[number]["id"];
-
 function useMotionSettings() {
   const reduced = useReducedMotionConfig();
   return React.useMemo(() => {
@@ -367,7 +357,7 @@ function PrimaryButton({
   return (
     <Button
       onClick={onClick}
-      className="h-12 rounded-xl bg-[#0D6EFD] px-[18px] text-[12px] font-semibold tracking-wide text-white shadow-[0_18px_40px_-24px_rgba(0,0,0,0.35)] hover:bg-[#0B5BDA]"
+      className="min-h-12 rounded-xl bg-[#0D6EFD] px-5 text-[12px] font-semibold tracking-wide text-white shadow-lg shadow-blue-500/15 hover:bg-[#0B5BDA]"
     >
       {children}
     </Button>
@@ -385,7 +375,7 @@ function SecondaryButton({
     <Button
       onClick={onClick}
       variant="outline"
-      className="h-12 rounded-xl border-[rgba(2,6,23,0.10)] bg-white px-[18px] text-[12px] font-semibold tracking-wide text-[#0b1220] hover:bg-[#f8fafc]"
+      className="min-h-12 rounded-xl border-slate-200 bg-white px-5 text-[12px] font-semibold tracking-wide text-[#0b1220] hover:bg-[#f8fafc]"
     >
       {children}
     </Button>
@@ -394,29 +384,6 @@ function SecondaryButton({
 
 export function LandingPage() {
   const router = useRouter();
-  const [activeNav, setActiveNav] = React.useState<NavId>("features");
-  const sectionsRef = React.useRef<Record<string, HTMLElement | null>>({});
-
-  React.useEffect(() => {
-    const ids = navItems.map((n) => n.id);
-    const elements = ids
-      .map((id) => document.getElementById(id))
-      .filter(Boolean) as HTMLElement[];
-    for (const el of elements) sectionsRef.current[el.id] = el;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => (b.intersectionRatio ?? 0) - (a.intersectionRatio ?? 0))[0];
-        if (visible?.target?.id) setActiveNav(visible.target.id as NavId);
-      },
-      { rootMargin: "-40% 0px -55% 0px", threshold: [0.05, 0.1, 0.2] },
-    );
-
-    for (const el of elements) observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
 
   const scrollToSection = React.useCallback((id: string) => {
     const el = document.getElementById(id);
@@ -427,8 +394,6 @@ export function LandingPage() {
   return (
     <MotionConfig reducedMotion="never">
       <div className="min-h-full bg-white text-[#0b1220]">
-        <Header activeNav={activeNav} onNav={scrollToSection} />
-
         <main>
           <Hero onNav={scrollToSection} />
           <FeaturesSection />
@@ -447,72 +412,18 @@ export function LandingPage() {
   );
 }
 
-function Header({
-  activeNav,
-  onNav,
-}: {
-  activeNav: string;
-  onNav: (id: string) => void;
-}) {
-  const router = useRouter();
-  return (
-    <div className="sticky top-0 z-50 border-b border-[rgba(15,23,42,0.08)] bg-[rgba(255,255,255,0.86)] backdrop-blur-[10px]">
-      <div className="mx-auto w-full max-w-[1200px] px-5 py-3.5">
-        <div className="flex items-center justify-between gap-4">
-          <Link href="/" className="text-[22px] font-semibold" style={{ color: BRAND.accent }}>
-            {BRAND.name}
-          </Link>
-
-          <div className="hidden items-center gap-3 md:flex">
-            <Button
-              asChild
-              variant="ghost"
-              className="h-10 rounded-full px-3 text-[13px] font-semibold text-[#334155] hover:bg-[#f8fafc]"
-            >
-              <Link href="/about">A propos</Link>
-            </Button>
-
-            {navItems.map((item) => {
-              const isActive = activeNav === item.id;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => onNav(item.id)}
-                  className={cn(
-                    "rounded-full border px-2.5 py-2 text-[13px] font-semibold transition-colors",
-                    isActive
-                      ? "border-[rgba(13,110,253,0.18)] bg-[rgba(13,110,253,0.10)] text-[#0D6EFD]"
-                      : "border-transparent bg-transparent text-[#334155] hover:bg-[#f8fafc]",
-                  )}
-                >
-                  {item.label}
-                </button>
-              );
-            })}
-
-            <div className="w-2.5" />
-
-            <SecondaryButton onClick={() => router.push("/request?intent=plan")}>CHOISIR UNE OFFRE</SecondaryButton>
-            <PrimaryButton onClick={() => router.push("/request?intent=test")}>DEMANDER UN TEST</PrimaryButton>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function Hero({ onNav }: { onNav: (id: string) => void }) {
   const router = useRouter();
   return (
     <section className="bg-[#f8fafc]">
-      <div className="mx-auto w-full max-w-[1200px] px-5 py-16">
-        <div className="flex flex-col items-center gap-7 md:flex-row">
-          <Reveal className="w-full flex-1">
-            <div className="inline-flex items-center rounded-full border border-[rgba(13,110,253,0.20)] bg-[rgba(13,110,253,0.10)] px-3 py-2 text-xs font-semibold text-[#0D6EFD]">
+      <div className="mx-auto w-full max-w-[1200px] px-5 py-14 md:py-16">
+        <div className="grid items-center gap-9 md:grid-cols-[0.92fr_1.08fr]">
+          <Reveal>
+            <div className="inline-flex max-w-full items-center rounded-full border border-blue-200 bg-blue-50 px-3 py-2 text-xs font-semibold text-[#0D6EFD]">
               Agenda - Patients - Ordonnances - Paiements
             </div>
 
-            <h1 className="mt-4 text-[40px] font-semibold leading-[46px] tracking-tight text-[#0b1220] md:text-[52px] md:leading-[58px]">
+            <h1 className="mt-5 text-[38px] font-semibold leading-[44px] tracking-tight text-[#0b1220] md:text-[54px] md:leading-[60px]">
               Gerez votre cabinet medical,
               <br />
               simplement.
@@ -525,17 +436,19 @@ function Hero({ onNav }: { onNav: (id: string) => void }) {
             </p>
 
             <div className="mt-5 flex flex-wrap gap-3">
-              <PrimaryButton onClick={() => router.push("/request?intent=test")}>DEMANDER UN TEST</PrimaryButton>
+              <PrimaryButton onClick={() => router.push("/request?intent=test")}>
+                DEMANDER UN TEST
+              </PrimaryButton>
               <SecondaryButton onClick={() => onNav("features")}>
                 VOIR LES FONCTIONNALITES
               </SecondaryButton>
             </div>
 
-            <div className="mt-5 flex flex-wrap gap-[18px]">
+            <div className="mt-5 flex flex-wrap gap-3">
               {["Prise en main rapide", "Acces securise", "Assistance WhatsApp"].map((t) => (
                 <div
                   key={t}
-                  className="flex items-center gap-2 rounded-full border border-[rgba(2,6,23,0.06)] bg-[rgba(2,6,23,0.04)] px-2.5 py-2"
+                  className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-2"
                 >
                   <span className="size-[7px] rounded-full bg-[#22c55e]" />
                   <span className="text-[12px] font-semibold text-[#334155]">
@@ -546,7 +459,7 @@ function Hero({ onNav }: { onNav: (id: string) => void }) {
             </div>
           </Reveal>
 
-          <Reveal delay={0.08} className="w-full flex-1">
+          <Reveal delay={0.08}>
             <ClinicHeroIllustration />
           </Reveal>
         </div>
@@ -557,6 +470,30 @@ function Hero({ onNav }: { onNav: (id: string) => void }) {
 
 function ClinicHeroIllustration() {
   const { duration, ease } = useMotionSettings();
+  const rows = [
+    {
+      title: "Accueil du jour",
+      value: "18 rendez-vous",
+      meta: "4 patients en attente",
+      icon: ClipboardList,
+      tone: "#0D6EFD",
+    },
+    {
+      title: "Patients suivis",
+      value: "124 dossiers actifs",
+      meta: "Documents et constantes",
+      icon: FolderOpen,
+      tone: "#16a34a",
+    },
+    {
+      title: "Paiements",
+      value: "6 recus aujourd hui",
+      meta: "2 factures a verifier",
+      icon: FileText,
+      tone: "#f59e0b",
+    },
+  ] as const;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 14 }}
@@ -565,55 +502,68 @@ function ClinicHeroIllustration() {
       transition={{ duration, ease }}
       className="w-full"
     >
-      <div className="relative rounded-[22px] border border-[rgba(2,6,23,0.10)] bg-white p-[18px] shadow-[0_20px_50px_-35px_rgba(0,0,0,0.25)]">
-        <div className="text-[15px] font-semibold text-[#0b1220]">
-          Ecran principal du cabinet
-        </div>
-        <div className="mt-1.5 text-[13px] text-[#64748b]">
-          Une interface unifiee pour l accueil, la consultation, les documents et
-          les paiements.
-        </div>
+      <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-5 shadow-2xl shadow-slate-900/10">
+        <div className="pointer-events-none absolute -right-16 -top-16 size-52 rounded-full bg-blue-100 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-20 -left-20 size-56 rounded-full bg-emerald-100 blur-3xl" />
 
-        <div className="mt-4 grid gap-3">
-          {[
-            { title: "Accueil du jour", value: "18 rendez-vous", tone: "#0D6EFD" },
-            { title: "Patients suivis", value: "124 dossiers actifs", tone: "#16a34a" },
-            { title: "Paiements", value: "6 recus aujourd hui", tone: "#f59e0b" },
-          ].map((item, idx) => (
+        <div className="relative rounded-2xl border border-slate-200 bg-white/95 p-4">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <div className="text-[15px] font-semibold text-[#0b1220]">
+                Ecran principal du cabinet
+              </div>
+              <div className="mt-1 text-[13px] leading-5 text-[#64748b]">
+                Une interface unifiee pour l accueil, la consultation, les
+                documents et les paiements.
+              </div>
+            </div>
+            <div className="hidden rounded-full bg-emerald-50 px-3 py-1.5 text-[12px] font-semibold text-emerald-700 sm:block">
+              En ligne
+            </div>
+          </div>
+
+          <div className="mt-5 grid gap-3">
+            {rows.map((item, idx) => (
             <motion.div
               key={item.title}
               initial={{ opacity: 0, x: -10 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, amount: 0.6 }}
               transition={{ duration: 0.45, ease, delay: 0.08 + idx * 0.06 }}
-              className="rounded-[16px] border border-[rgba(2,6,23,0.08)] bg-[rgba(248,250,252,0.96)] p-3.5"
+              className="rounded-2xl border border-slate-200 bg-[#f8fafc] p-4"
             >
-              <div className="flex items-center justify-between">
-                <div className="text-[13px] font-semibold text-[#0b1220]">
-                  {item.title}
-                </div>
+              <div className="flex items-center gap-3">
                 <div
-                  className="size-[10px] rounded-full"
-                  style={{ backgroundColor: item.tone }}
-                />
+                  className="flex size-10 shrink-0 items-center justify-center rounded-xl"
+                  style={{ backgroundColor: `${item.tone}14`, color: item.tone }}
+                >
+                  <item.icon className="size-5" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="text-[13px] font-semibold text-[#0b1220]">
+                    {item.title}
+                  </div>
+                  <div className="mt-1 text-[12px] text-[#64748b]">
+                    {item.meta}
+                  </div>
+                </div>
+                <div className="text-right text-[13px] font-semibold text-[#0b1220]">
+                  {item.value}
+                </div>
               </div>
-              <div className="mt-2 text-[12px] text-[#64748b]">{item.value}</div>
             </motion.div>
-          ))}
-        </div>
-
-        <div className="pointer-events-none absolute -right-10 -top-10 hidden h-40 w-40 rounded-full bg-[rgba(13,110,253,0.10)] blur-2xl md:block" />
-        <div className="pointer-events-none absolute -bottom-10 -left-10 hidden h-40 w-40 rounded-full bg-[rgba(34,197,94,0.10)] blur-2xl md:block" />
-
-        <div className="mt-4 flex justify-start gap-2 md:justify-end">
-          <div className="rounded-full border border-[rgba(2,6,23,0.06)] bg-white px-3 py-2 text-[12px] font-semibold text-[#0b1220]">
-            Accueil
+            ))}
           </div>
-          <div className="rounded-full border border-[rgba(2,6,23,0.06)] bg-white px-3 py-2 text-[12px] font-semibold text-[#0b1220]">
-            Dossiers
-          </div>
-          <div className="rounded-full border border-[rgba(2,6,23,0.06)] bg-white px-3 py-2 text-[12px] font-semibold text-[#0b1220]">
-            Paiements
+
+          <div className="mt-4 flex flex-wrap justify-start gap-2 md:justify-end">
+            {["Accueil", "Dossiers", "Paiements"].map((item) => (
+              <div
+                key={item}
+                className="rounded-full border border-slate-200 bg-white px-3 py-2 text-[12px] font-semibold text-[#0b1220]"
+              >
+                {item}
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -628,122 +578,31 @@ function FeaturesSection() {
         <Reveal>
           <SectionHeader
             center
-            title="Better than a simple desktop cabinet tool"
-            description="Une interface claire pour retrouver les actions importantes du cabinet sans alourdir la journee."
+            title="Tous les modules utiles du cabinet"
+            description="Agenda, patients, documents, chat, inventaire, taches et rapports restent dans un seul espace clair pour toute l equipe."
           />
         </Reveal>
 
-        <div className="mt-8 grid gap-4 md:grid-cols-3">
-          {productScreens.map((item, index) => (
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {productModules.map((item, index) => (
             <Reveal key={item.title} delay={0.08 + index * 0.06}>
-              <div className="rounded-[24px] border border-[rgba(2,6,23,0.08)] bg-white p-[18px] shadow-[0_16px_36px_-28px_rgba(0,0,0,0.22)]">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="text-[16px] font-semibold text-[#0b1220]">
-                        {item.title}
-                      </div>
-                      <div className="mt-1 text-[12px] text-[#64748b]">
-                        {item.subtitle}
-                      </div>
-                    </div>
-                    <div className="size-3 rounded-full" style={{ backgroundColor: item.accent }} />
-                  </div>
-
-                  <div className="mt-[18px] grid gap-2.5 rounded-[20px] border border-[rgba(2,6,23,0.06)] bg-[#f8fafc] p-4">
-                    {item.metrics.map((metric, metricIndex) => (
-                      <div
-                        key={metric}
-                        className={cn(
-                          "rounded-[14px] border border-[rgba(2,6,23,0.06)] px-3 py-2.5 text-[12px] font-semibold text-[#0b1220]",
-                          metricIndex === 0 ? "bg-[rgba(13,110,253,0.08)]" : "bg-white",
-                        )}
-                      >
-                        {metric}
-                      </div>
-                    ))}
-                  </div>
+              <div className="h-full rounded-[20px] border border-[rgba(2,6,23,0.10)] bg-white p-4 shadow-[0_18px_40px_-32px_rgba(0,0,0,0.18)]">
+                <div
+                  className="mb-4 inline-flex size-[44px] items-center justify-center rounded-[15px]"
+                  style={{ backgroundColor: `${item.color}14`, color: item.color }}
+                >
+                  <item.icon className="size-[21px]" />
                 </div>
-            </Reveal>
-          ))}
-        </div>
-
-        <div className="mt-7 flex flex-wrap justify-center gap-4">
-          {features.map((f, idx) => (
-            <Reveal key={f.title} delay={0.12 + idx * 0.06}>
-              <div className="w-[292px] rounded-[20px] border border-[rgba(2,6,23,0.10)] bg-white p-4 shadow-[0_18px_40px_-30px_rgba(0,0,0,0.22)]">
-                <div className="mb-3 inline-flex size-[42px] items-center justify-center rounded-[14px] border border-[rgba(13,110,253,0.18)] bg-[rgba(13,110,253,0.10)]">
-                  <f.icon className="size-[21px]" style={{ color: BRAND.accent }} />
+                <div className="text-[15px] font-semibold text-[#0b1220]">
+                  {item.title}
                 </div>
-                <div className="text-[16px] font-semibold text-[#0b1220]">
-                  {f.title}
-                </div>
-                <div className="mt-2 text-[14px] leading-[22px] text-[#556070]">
-                  {f.description}
+                <div className="mt-2 text-[13px] leading-[21px] text-[#556070]">
+                  {item.description}
                 </div>
               </div>
             </Reveal>
           ))}
         </div>
-
-        <Reveal delay={0.36} className="mt-9">
-          <SectionHeader
-            center
-            eyebrow="SPECIALITES"
-            title="Adapte aux specialites courantes"
-            description="Le meme parcours de base, avec des espaces specialises quand le cabinet en a besoin."
-          />
-
-          <div className="mt-6 flex flex-wrap justify-center gap-2.5">
-            {specialties.map((s) => (
-              <div
-                key={s}
-                className="rounded-full border border-[rgba(13,110,253,0.14)] bg-[rgba(13,110,253,0.08)] px-3.5 py-2.5 text-[13px] font-semibold text-[#0D6EFD]"
-              >
-                {s}
-              </div>
-            ))}
-          </div>
-        </Reveal>
-
-        <Reveal delay={0.42} className="mt-9">
-          <SectionHeader
-            center
-            eyebrow="APERCUS"
-            title="Previews specialises"
-            description="Chaque specialite garde le meme socle produit, avec les outils dont la consultation a besoin."
-          />
-
-          <div className="mt-7 flex flex-wrap justify-center gap-4">
-            {specialtyCards.map((card, idx) => (
-              <Reveal key={card.title} delay={0.44 + idx * 0.06}>
-                <div className="w-full max-w-[320px] rounded-[22px] border border-[rgba(2,6,23,0.08)] bg-white p-5 md:w-[272px]">
-                  <div className="flex items-center justify-between gap-3">
-                    <div className="text-[18px] font-semibold text-[#0b1220]">
-                      {card.title}
-                    </div>
-                    <div className="inline-flex size-10 items-center justify-center rounded-[16px] bg-[rgba(13,110,253,0.10)]">
-                      <card.icon className="size-[18px] text-[#0D6EFD]" />
-                    </div>
-                  </div>
-                  <div className="mt-2.5 text-[14px] leading-[22px] text-[#556070]">
-                    {card.description}
-                  </div>
-
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {card.tags.map((t) => (
-                      <div
-                        key={t}
-                        className="rounded-full border border-[rgba(2,6,23,0.08)] bg-[#f8fafc] px-3 py-2 text-[12px] font-semibold text-[#0b1220]"
-                      >
-                        {t}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </Reveal>
       </div>
     </section>
   );
@@ -790,16 +649,33 @@ function StatsSection() {
 
   return (
     <section ref={ref} className="bg-[#0D6EFD]">
-      <div className="mx-auto w-full max-w-[1200px] px-5 py-12">
-        <div className="flex flex-wrap justify-around gap-6">
+      <div className="mx-auto w-full max-w-[1200px] px-5 py-14">
+        <Reveal>
+          <div className="mx-auto mb-8 max-w-[720px] text-center">
+            <div className="text-[12px] font-semibold tracking-widest text-[rgba(255,255,255,0.75)]">
+              IMPACT CABINET
+            </div>
+            <h2 className="mt-2 text-[30px] font-semibold leading-[36px] text-white md:text-[38px] md:leading-[44px]">
+              Une base claire pour organiser patients, equipes et cliniques.
+            </h2>
+          </div>
+        </Reveal>
+
+        <div className="grid gap-4 md:grid-cols-3">
           {stats.map((s, idx) => (
             <Reveal key={s.label} delay={0.1 + idx * 0.06}>
-              <div className="text-center">
-                <div className="text-[44px] font-semibold leading-none text-white">
+              <div className="h-full rounded-[22px] border border-[rgba(255,255,255,0.16)] bg-[rgba(255,255,255,0.10)] p-5 text-center">
+                <div className="mx-auto flex size-12 items-center justify-center rounded-[16px] bg-white text-[#0D6EFD]">
+                  <s.icon className="size-[22px]" />
+                </div>
+                <div className="mt-4 text-[44px] font-semibold leading-none text-white">
                   <CountUpNumber value={s.value} suffix={s.suffix} start={inView} />
                 </div>
-                <div className="mt-2 text-[14px] text-[rgba(255,255,255,0.92)]">
+                <div className="mt-2 text-[15px] font-semibold text-white">
                   {s.label}
+                </div>
+                <div className="mx-auto mt-2 max-w-[260px] text-[13px] leading-[20px] text-[rgba(255,255,255,0.82)]">
+                  {s.detail}
                 </div>
               </div>
             </Reveal>
@@ -1104,54 +980,64 @@ function FAQSection() {
   const { duration, ease } = useMotionSettings();
 
   return (
-    <section id="faq" className="scroll-mt-24 bg-[#f8fafc]">
-      <div className="mx-auto w-full max-w-[1200px] px-5 py-16">
+    <section id="faq" className="scroll-mt-24 bg-white">
+      <div className="mx-auto grid w-full max-w-[1200px] gap-8 px-5 py-16 md:grid-cols-[0.8fr_1.2fr]">
         <Reveal>
           <SectionHeader
-            center
             eyebrow="FAQ"
-            title="Questions frequentes"
-            description="Les reponses essentielles avant de demarrer."
+            title="Les reponses avant la demo."
+            description="Un cabinet medical a besoin de confiance avant de mettre ses vrais patients dans un outil."
           />
+          <div className="mt-6 rounded-[20px] border border-[rgba(2,6,23,0.08)] bg-[#f8fafc] p-5">
+            <div className="flex items-center gap-3">
+              <ShieldCheck className="size-5 text-[#0D6EFD]" />
+              <div className="text-[14px] font-semibold text-[#0b1220]">
+                Roles, sauvegardes et confidentialite
+              </div>
+            </div>
+            <p className="mt-3 text-[14px] leading-[22px] text-[#556070]">
+              Gardez un cadre clair pour le lancement, avec des acces separes et
+              une mise en route accompagnee.
+            </p>
+          </div>
         </Reveal>
 
-        <div className="mx-auto mt-8 grid w-full max-w-[860px] gap-3">
+        <div className="grid gap-3">
           {faqItems.map((f, idx) => {
             const open = active === idx;
             return (
-              <div
-                key={f.question}
-                className="rounded-[20px] border border-[rgba(2,6,23,0.10)] bg-white"
-              >
-                <button
-                  className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
-                  onClick={() => setActive(open ? null : idx)}
-                >
-                  <div className="text-[15px] font-semibold text-[#0b1220]">
-                    {f.question}
-                  </div>
-                  <ChevronDown
-                    className={cn(
-                      "size-5 text-[#64748b] transition-transform",
-                      open && "rotate-180",
-                    )}
-                  />
-                </button>
+              <Reveal key={f.question} delay={0.04 + idx * 0.04}>
+                <div className="overflow-hidden rounded-[20px] border border-[rgba(2,6,23,0.10)] bg-white">
+                  <button
+                    className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
+                    onClick={() => setActive(open ? null : idx)}
+                  >
+                    <div className="text-[15px] font-semibold text-[#0b1220]">
+                      {f.question}
+                    </div>
+                    <ChevronDown
+                      className={cn(
+                        "size-5 shrink-0 text-[#64748b] transition-transform",
+                        open && "rotate-180",
+                      )}
+                    />
+                  </button>
 
-                <motion.div
-                  initial={false}
-                  animate={{
-                    height: open ? "auto" : 0,
-                    opacity: open ? 1 : 0,
-                  }}
-                  transition={{ duration: duration ? 0.25 : 0, ease }}
-                  className="overflow-hidden"
-                >
-                  <div className="px-5 pb-5 text-[14px] leading-[22px] text-[#556070]">
-                    {f.answer}
-                  </div>
-                </motion.div>
-              </div>
+                  <motion.div
+                    initial={false}
+                    animate={{
+                      height: open ? "auto" : 0,
+                      opacity: open ? 1 : 0,
+                    }}
+                    transition={{ duration: duration ? 0.25 : 0, ease }}
+                    className="overflow-hidden"
+                  >
+                    <div className="px-5 pb-5 text-[14px] leading-[22px] text-[#556070]">
+                      {f.answer}
+                    </div>
+                  </motion.div>
+                </div>
+              </Reveal>
             );
           })}
         </div>
