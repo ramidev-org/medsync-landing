@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { useSearchParams } from "next/navigation";
+import { MotionConfig, motion } from "framer-motion";
 import { CheckCircle2, MessageCircle, Send } from "lucide-react";
 
 import { buildLeadMessage, buildWhatsAppUrl, type LeadFormData } from "@/lib/whatsapp";
@@ -70,11 +71,17 @@ export function RequestForm() {
   };
 
   return (
+    <MotionConfig reducedMotion="user">
     <main className="min-h-screen bg-[#f8fafc] text-[#0b1220]">
       <div className="mx-auto w-full max-w-[1040px] px-5 py-10 md:py-14">
         <div className="grid gap-6 md:grid-cols-5 md:items-start">
           <div className="md:col-span-2">
-            <aside className="rounded-xl border border-[rgba(2,6,23,0.08)] bg-white p-5 md:sticky md:top-6">
+            <motion.aside
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              className="rounded-xl border border-[rgba(2,6,23,0.08)] bg-white p-5 md:sticky md:top-6"
+            >
               <div className="text-xs font-semibold tracking-widest text-[#64748b]">DEMANDE D&apos;ACCES</div>
               <h1 className="mt-2 text-balance text-3xl font-semibold tracking-tight">
                 {form.intent === "test" ? "Demander un test" : "Choisir une offre"}
@@ -122,11 +129,14 @@ export function RequestForm() {
                   Votre demande est envoyee avec vos coordonnees afin de vous recontacter et confirmer les details.
                 </div>
               </div>
-            </aside>
+            </motion.aside>
           </div>
 
           <div className="md:col-span-3">
-            <form
+            <motion.form
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: 0.05 }}
               onSubmit={onSubmit}
               className="rounded-xl border border-[rgba(2,6,23,0.08)] bg-white p-5 md:p-6"
             >
@@ -229,11 +239,12 @@ export function RequestForm() {
                   Envoyer la demande
                 </button>
               </div>
-            </form>
+            </motion.form>
           </div>
         </div>
       </div>
     </main>
+    </MotionConfig>
   );
 }
 
